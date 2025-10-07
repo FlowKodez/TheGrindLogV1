@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TheGrindLog — FlowKode Edition</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0F172A; /* dark */
+    --card:#111827; /* card */
+    --muted:#94a3b8;
+    --accent:#8B5CF6; /* violet */
+    --accent-2:#06B6D4; /* cyan */
+    --success:#10B981;
+    --danger:#EF4444;
+    --glass: rgba(255,255,255,0.04);
+    --glass-2: rgba(255,255,255,0.02);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,var(--bg) 0%, #071022 100%);
+    color: #E6EEF7;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.35;
+  }
+
+  /* Layout */
+  .wrap{max-width:1100px;margin:28px auto;padding:18px}
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin-bottom:18px;
+  }
+  .brand{
+    display:flex;gap:12px;align-items:center;
+  }
+  .logo{
+    width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(11,20,40,.6);
+    font-family:"Orbitron";font-weight:700;color:#021226;
+    transform:translateY(0);transition:transform .25s;
+  }
+  .logo:hover{transform:translateY(-4px) rotate(-4deg)}
+  .brand h1{margin:0;font-size:20px;letter-spacing:0.6px}
+  .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+  /* Nav */
+  nav{display:flex;gap:8px;align-items:center}
+  .navbtn{background:transparent;border:0;padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer;font-weight:600}
+  .navbtn.active{background:linear-gradient(90deg, rgba(139,92,246,0.12), rgba(6,182,212,0.06));color:var(--accent)}
+  .cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:8px 14px;border-radius:10px;color:#021226;font-weight:700;border:none;cursor:pointer;box-shadow:0 8px 30px rgba(11,20,40,.6)}
+  .small{font-size:12px;color:var(--muted)}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:980px){ .grid{grid-template-columns:320px 1fr} }
+
+  /* side */
+  .card{background:linear-gradient(180deg,var(--card), rgba(20,30,44,.6));border-radius:14px;padding:16px;box-shadow:0 10px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
+  .section-title{font-weight:700;margin:0 0 8px}
+
+  /* habit list */
+  .habit{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);margin-bottom:10px}
+  .habit .left{display:flex;align-items:center;gap:12px}
+  .circle{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg, rgba(139,92,246,0.12), rgba(6,182,212,0.06));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+  .habit h4{margin:0;font-size:14px}
+  .meta{font-size:12px;color:var(--muted)}
+  .actions{display:flex;gap:8px;align-items:center}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:8px;color:var(--muted);cursor:pointer;font-weight:600}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021226;border:none;box-shadow:0 8px 30px rgba(139,92,246,.07)}
+
+  /* progress bars + charts */
+  .bar{height:10px;background:var(--glass);border-radius:999px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%}
+
+  /* header stats */
+  .stats{display:flex;gap:12px;align-items:center}
+  .stat{padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.018), transparent);text-align:center;min-width:100px}
+  .stat h3{margin:0;font-size:16px}
+  .stat p{margin:0;color:var(--muted);font-size:12px}
+
+  /* hero */
+  .hero{display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:14px;background:linear-gradient(90deg, rgba(139,92,246,0.06), rgba(6,182,212,0.02));align-items:flex-start}
+  .hero h2{margin:0;font-family:"Orbitron";letter-spacing:0.6px}
+  .hero small{color:var(--muted)}
+
+  /* tabs */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{padding:6px 10px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.03);cursor:pointer;color:var(--muted)}
+  .chip.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021226;border:none}
+
+  /* footer */
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:flex;align-items:center;justify-content:center;z-index:80;opacity:0;pointer-events:none;transition:opacity .18s}
+  .modal.open{opacity:1;pointer-events:auto}
+  .modal .box{width:100%;max-width:520px;background:linear-gradient(180deg,var(--card), #071022);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+
+  /* small helpers */
+  .muted{color:var(--muted)}
+  input,textarea,select{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px;color:inherit;width:100%;outline:none}
+  .flex{display:flex;gap:8px;align-items:center}
+  .right{margin-left:auto}
+  .glow{box-shadow:0 8px 40px rgba(139,92,246,0.12)}
+  .pulse{animation:pulse 2s infinite}
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+  /* mobile tweaks */
+  @media(max-width:640px){
+    .wrap{padding:12px;margin:8px}
+    .brand h1{font-size:18px}
+  }
+
+  /* small chart styles */
+  .mini-chart{width:100%;height:64px}
+  .spark{display:flex;gap:4px;align-items:end;height:56px}
+  .spark > div{flex:1;border-radius:6px;background:linear-gradient(180deg, rgba(139,92,246,0.8), rgba(6,182,212,0.6));opacity:0.95}
+
+  /* confetti simple */
+  .confetti{position:fixed;pointer-events:none;left:0;top:0;width:100%;height:100%;z-index:90;overflow:hidden}
+  .confetti i{position:absolute;width:8px;height:12px;border-radius:2px;opacity:0;transform:translateY(-20px)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">GL</div>
+      <div>
+        <h1>TheGrindLog</h1>
+        <p>built by FlowKode — ruthless consistency</p>
+      </div>
+    </div>
+
+    <nav>
+      <button class="navbtn active" data-route="home">Home</button>
+      <button class="navbtn" data-route="dashboard">Dashboard</button>
+      <button class="navbtn" data-route="goals">Goals</button>
+      <button class="navbtn" data-route="analytics">Analytics</button>
+      <button class="navbtn" data-route="mindset">Mindset</button>
+      <button class="navbtn" data-route="settings">Settings</button>
+      <button class="cta" id="shareSite">Share</button>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- SPA content injected here -->
+  </main>
+
+  <footer class="muted">Made with discipline • FlowKode • #TheGrindLog</footer>
+</div>
+
+<!-- modal container -->
+<div id="modal" class="modal">
+  <div class="box" id="modalBox"></div>
+</div>
+
+<!-- confetti -->
+<div class="confetti" id="confetti"></div>
+
+<script>
+/* ============================
+   TheGrindLog Single-file SPA
+   - mobile-first, offline persistence
+   - grit & grind aesthetic
+   ============================ */
+
+/* ---------- Utilities ---------- */
+const qs = (s, el=document) => el.querySelector(s);
+const qsa = (s, el=document) => Array.from(el.querySelectorAll(s));
+const todayKey = () => new Date().toISOString().slice(0,10);
+
+/* ---------- Persistence ---------- */
+const LS_KEY = 'thegrindlog_v1_flowkode';
+const initial = {
+  xp: 0,
+  habits: [
+    { id:'h1', name:'Morning Read', type:'time', goal:30, history:{} },
+    { id:'h2', name:'Pushups', type:'count', goal:50, history:{} },
+    { id:'h3', name:'Cold Shower', type:'binary', goal:1, history:{} },
+  ],
+  goals: [
+    { id:'g1', title:'Get 60% habits consistency in 30 days', progress:12, target:30 }
+  ],
+  settings: { theme:'dark', ambient:false }
+};
+function load(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return {...initial};
+    const parsed = JSON.parse(raw);
+    return {...initial, ...parsed};
+  }catch(e){ return {...initial} }
+}
+function save(state){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+/* ---------- App State ---------- */
+let state = load();
+
+/* ---------- Basic helpers ---------- */
+function uid(prefix='id'){ return prefix + Math.random().toString(36).slice(2,9); }
+function clamp(n,min,max){ return Math.max(min,Math.min(max,n)); }
+
+/* ---------- XP & Streak logic ---------- */
+function computeXpFor(habit, value){
+  if(!value) return 0;
+  if(habit.type === 'binary') return 7;
+  const frac = Math.min(Number(value)/habit.goal, 1);
+  return Math.floor(frac * 12);
+}
+function calcStreak(history){
+  // consecutive days ending today
+  let streak=0; let d=new Date();
+  for(let i=0;i<365;i++){
+    const key = d.toISOString().slice(0,10);
+    const v = history[key];
+    if(!v || v===0) break;
+    streak++; d.setDate(d.getDate()-1);
+  }
+  return streak;
+}
+function grindScore(){
+  const avgStreak = state.habits.reduce((s,h)=>s+calcStreak(h.history||{}),0)/Math.max(1,state.habits.length);
+  return Math.round(state.xp + avgStreak*9);
+}
+
+/* ---------- UI helpers ---------- */
+function openModal(html){
+  const modal = qs('#modal'); const box=qs('#modalBox');
+  box.innerHTML = html;
+  modal.classList.add('open'); 
+}
+function closeModal(){ qs('#modal').classList.remove('open'); }
+qs('#modal').addEventListener('click', (e)=> { if(e.target.id==='modal') closeModal(); });
+
+/* ---------- Confetti ---------- */
+function triggerConfetti(){
+  const container = qs('#confetti'); container.innerHTML='';
+  for(let i=0;i<60;i++){
+    const el=document.createElement('i'); 
+    el.style.left = Math.random()*100 + '%';
+    el.style.background = (i%2===0)?'var(--accent)':'var(--accent-2)';
+    el.style.opacity = Math.random()*0.9+0.2;
+    el.style.transform = `translateY(${ -50 - Math.random()*50 }px) rotate(${Math.random()*360}deg)`;
+    el.style.top = '-20px';
+    container.appendChild(el);
+    (function(e){
+      setTimeout(()=>{ e.style.transition='transform 1200ms cubic-bezier(.2,.9,.2,1),opacity 1000ms'; e.style.transform=`translateY(${600 + Math.random()*200}px) rotate(${Math.random()*720}deg)`; e.style.opacity=0.95; }, 20 + i*12);
+      setTimeout(()=>{ try{ e.remove() }catch{} }, 1600 + i*20);
+    })(el);
+  }
+}
+
+/* ---------- Rendering: NAV + routing ---------- */
+const navButtons = qsa('.navbtn');
+navButtons.forEach(n=> n.addEventListener('click', (e)=>{
+  navButtons.forEach(b=>b.classList.remove('active'));
+  e.currentTarget.classList.add('active');
+  const route = e.currentTarget.dataset.route;
+  renderRoute(route);
+}));
+
+qs('#shareSite').addEventListener('click', ()=> {
+  const txt = `I just shipped TheGrindLog — FlowKode Edition. Grind Score: ${grindScore()}. #TheGrindLog`;
+  if(navigator.share){
+    navigator.share({title:'TheGrindLog', text:txt, url:location.href});
+  } else {
+    navigator.clipboard.writeText(txt); alert('Share text copied to clipboard — paste in your story!');
+  }
+});
+
+/* ---------- Page renderers ---------- */
+function renderRoute(route='home'){
+  const app = qs('#app'); app.innerHTML = '';
+  if(route==='home') renderHome(app);
+  else if(route==='dashboard') renderDashboard(app);
+  else if(route==='goals') renderGoals(app);
+  else if(route==='analytics') renderAnalytics(app);
+  else if(route==='mindset') renderMindset(app);
+  else if(route==='settings') renderSettings(app);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- Home ---------- */
+function renderHome(root){
+  root.innerHTML = `
+    <div class="grid">
+      <div class="card hero">
+        <h2 style="font-size:20px">Dominate Your Day — TheGrindLog</h2>
+        <small class="muted">Not just tracking. Transformation. FlowKode edition — dark, focused, and ruthless.</small>
+        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+          <button class="cta" id="startGrind">Start Your Grind</button>
+          <button class="btn" id="viewDash">Open Dashboard</button>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:10px;align-items:center">
+          <div class="stat">
+            <h3>${grindScore()}</h3>
+            <p class="small">Grind Score</p>
+          </div>
+          <div class="stat">
+            <h3>${state.xp}</h3>
+            <p class="small">XP</p>
+          </div>
+          <div class="stat">
+            <h3>${state.habits.length}</h3>
+            <p class="small">Habits</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Quick Actions</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="chip" id="quickAdd">+ Quick Add Habit</button>
+          <button class="chip" id="quickConfetti">Celebrate Win</button>
+          <button class="chip" id="quickExport">Export Data</button>
+          <button class="chip" id="quickImport">Import Data</button>
+        </div>
+        <div style="margin-top:12px;color:var(--muted);font-size:13px">
+          Pro tip: Keep habits small. 1 ritual at a time. Build rage for repetition.
+        </div>
+      </div>
+    </div>
+  `;
+  // actions
+  qs('#startGrind').addEventListener('click', ()=> { document.querySelector('[data-route="dashboard"]').click(); });
+  qs('#viewDash').addEventListener('click', ()=> { document.querySelector('[data-route="dashboard"]').click(); });
+  qs('#quickAdd').addEventListener('click', ()=> openAddHabitModal());
+  qs('#quickConfetti').addEventListener('click', ()=> { triggerConfetti(); });
+  qs('#quickExport').addEventListener('click', ()=> { navigator.clipboard.writeText(JSON.stringify(state)); alert('Export copied to clipboard'); });
+  qs('#quickImport').addEventListener('click', ()=> {
+    openModal(`<h3 class="section-title">Import Data</h3>
+    <p class="muted">Paste JSON data exported earlier.</p>
+    <textarea id="importArea" style="height:120px"></textarea>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn primary" id="doImport">Import</button>
+      <button class="btn" id="cancelImport">Cancel</button>
+    </div>`);
+    qs('#doImport').addEventListener('click', ()=> {
+      try{
+        const raw = qs('#importArea').value;
+        const parsed = JSON.parse(raw);
+        state = {...state, ...parsed}; save(state); closeModal(); alert('Imported'); renderRoute('home');
+      }catch(e){ alert('Invalid JSON') }
+    });
+    qs('#cancelImport').addEventListener('click', ()=> closeModal());
+  });
+}
+
+/* ---------- Dashboard ---------- */
+function renderDashboard(root){
+  root.innerHTML = `
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h3 class="section-title">Quick Add</h3>
+        <div style="display:flex;gap:8px;flex-direction:column">
+          <input id="hName" placeholder="Habit name (eg. Run, Read)" />
+          <div style="display:flex;gap:8px">
+            <select id="hType">
+              <option value="binary">Binary (Yes/No)</option>
+              <option value="time">Time (minutes)</option>
+              <option value="count">Count (reps)</option>
+            </select>
+            <input id="hGoal" placeholder="Goal (1/30/20)" value="1" />
+            <button class="btn primary" id="addHabitBtn">Add</button>
+          </div>
+        </div>
+        <div style="margin-top:12px" class="muted">Start small. Aim to never break your 3-day streak.</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3 class="section-title">Goals</h3>
+        <div id="goalsList"></div>
+        <div style="margin-top:10px">
+          <button class="btn" id="addGoalBtn">+ New Goal</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h3 class="section-title">Today</h3>
+            <div class="small muted">Date: ${new Date().toLocaleDateString()}</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="small muted">XP: ${state.xp}</div>
+            <div class="small muted">Grind Score: ${grindScore()}</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" id="habitsContainer"></div>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:12px">
+        <div class="card" style="flex:1">
+          <h4 class="section-title">Weekly Consistency</h4>
+          <div id="miniSpark" class="mini-chart"></div>
+        </div>
+        <div class="card" style="width:220px">
+          <h4 class="section-title">Next Milestone</h4>
+          <div id="nextM"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;
+
+  // populate goals list
+  function paintGoals(){
+    const container = qs('#goalsList'); container.innerHTML='';
+    state.goals.forEach(g=> {
+      const el = document.createElement('div'); el.className='habit';
+      el.innerHTML = `<div class="left"><div class="circle">G</div><div><h4>${g.title}</h4><div class="meta">${g.progress}/${g.target} days</div></div></div>
+      <div class="actions"><button class="btn" data-id="${g.id}" data-act="editGoal">Edit</button><button class="btn" data-id="${g.id}" data-act="delGoal">Delete</button></div>`;
+      container.appendChild(el);
+    });
+    qsa('#goalsList .btn').forEach(b=> b.addEventListener('click', (e)=>{
+      const id = e.currentTarget.dataset.id; const act = e.currentTarget.dataset.act;
+      if(act==='delGoal'){ state.goals = state.goals.filter(x=>x.id!==id); save(state); paintGoals(); }
+      if(act==='editGoal'){
+        const g = state.goals.find(x=>x.id===id);
+        const newTitle = prompt('Edit goal title', g.title);
+        if(newTitle) { g.title=newTitle; save(state); paintGoals(); }
+      }
+    }));
+  }
+  paintGoals();
+  qs('#addGoalBtn').addEventListener('click', ()=> {
+    const title = prompt('Goal title (example: Lose 4 kg in 60 days)');
+    if(!title) return;
+    const g = { id:uid('g'), title, progress:0, target:30 };
+    state.goals.push(g); save(state); paintGoals();
+  });
+
+  // add habit
+  qs('#addHabitBtn').addEventListener('click', ()=> {
+    const name = qs('#hName').value.trim(); const type = qs('#hType').value; const goal = Number(qs('#hGoal').value) || 1;
+    if(!name) return alert('Name required');
+    const h = { id:uid('h'), name, type, goal, history:{} };
+    state.habits.unshift(h); save(state); renderRoute('dashboard');
+  });
+
+  // render habits list
+  function paintHabits(){
+    const container = qs('#habitsContainer'); container.innerHTML='';
+    state.habits.forEach(h=> {
+      const el = document.createElement('div'); el.className='habit';
+      const valToday = (h.history||{})[todayKey()] || 0;
+      let statusHTML = '';
+      if(h.type === 'binary'){
+        statusHTML = `<button class="btn primary" data-id="${h.id}" data-act="toggle"> ${valToday? 'DONE':'Mark'} </button>`;
+      } else {
+        statusHTML = `<input type="number" min="0" placeholder="${h.goal}" value="${valToday||''}" style="width:90px;border-radius:8px" data-id="${h.id}" data-act="input"> <button class="btn primary" data-id="${h.id}" data-act="saveVal">Save</button>`;
+      }
+      el.innerHTML = `<div class="left"><div class="circle">${h.name.slice(0,1)}</div><div><h4>${h.name}</h4><div class="meta">${h.type} • goal ${h.goal} • streak ${calcStreak(h.history||{})}d</div></div></div>
+      <div class="actions">${statusHTML}<div style="width:14px"></div><button class="btn" data-id="${h.id}" data-act="edit">Edit</button><button class="btn" data-id="${h.id}" data-act="del">Del</button></div>`;
+      container.appendChild(el);
+    });
+
+    // add listeners
+    qsa('[data-act="toggle"]').forEach(b=> b.addEventListener('click', (e)=>{
+      const id = e.currentTarget.dataset.id; toggleHabit(id);
+    }));
+    qsa('[data-act="edit"]').forEach(b=> b.addEventListener('click', (e)=>{
+      const id=e.currentTarget.dataset.id; const h=state.habits.find(x=>x.id===id);
+      const newName = prompt('Rename habit', h.name); if(newName){ h.name=newName; save(state); renderRoute('dashboard'); }
+    }));
+    qsa('[data-act="del"]').forEach(b=> b.addEventListener('click', (e)=>{
+      const id=e.currentTarget.dataset.id; if(confirm('Delete habit?')){ state.habits = state.habits.filter(x=>x.id!==id); save(state); renderRoute('dashboard'); }
+    }));
+    qsa('[data-act="input"]').forEach(inp=> inp.addEventListener('keydown', (ev)=>{
+      if(ev.key==='Enter'){ const id=ev.target.dataset.id; const v = Number(ev.target.value)||0; saveHabitValue(id,v); }
+    }));
+    qsa('[data-act="saveVal"]').forEach(b=> b.addEventListener('click', (e)=>{
+      const id=e.currentTarget.dataset.id; const inp = document.querySelector(`[data-act="input"][data-id="${id}"]`); const v = Number(inp.value)||0; saveHabitValue(id,v);
+    }));
+  }
+  paintHabits();
+
+  // mini spark: average % of completed days last 7 days
+  function paintSpark(){
+    const days=7; const arr=[];
+    for(let i=0;i<days;i++){
+      let sum=0; state.habits.forEach(h=> { const date = (dOffset(i)); const v=(h.history||{})[date]||0; if(h.type==='binary'){ if(v===1) sum++; } else { if(v>=h.goal) sum++; } });
+      arr.push(sum/state.habits.length);
+    }
+    const el = qs('#miniSpark'); el.innerHTML='';
+    const spark = document.createElement('div'); spark.className='spark';
+    arr.forEach(v=>{ const d = document.createElement('div'); d.style.height = `${20 + v*80}px`; spark.appendChild(d); });
+    el.appendChild(spark);
+  }
+  paintSpark();
+
+  // next milestone
+  qs('#nextM').innerHTML = `<div style="font-size:14px;font-weight:700">Level up soon</div><div class="muted">Keep the streak and earn XP</div>`;
+
+}
+
+/* ---------- Goals ---------- */
+function renderGoals(root){
+  root.innerHTML = `
+    <div class="card">
+      <h3 class="section-title">Goals</h3>
+      <div id="goalsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px"></div>
+      <div style="margin-top:12px">
+        <button class="btn primary" id="createGoal">+ Create Goal</button>
+      </div>
+    </div>
+  `;
+  const grid = qs('#goalsGrid');
+  grid.innerHTML = '';
+  state.goals.forEach(g=>{
+    const el = document.createElement('div'); el.className='card';
+    const pct = Math.round((g.progress / Math.max(1,g.target))*100);
+    el.innerHTML = `<h4>${g.title}</h4><div class="meta">${g.progress}/${g.target} days</div>
+      <div style="margin-top:10px" class="bar"><i style="width:${pct}%"></i></div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="btn" data-id="${g.id}" data-act="inc">+ Day</button>
+        <button class="btn" data-id="${g.id}" data-act="edit">Edit</button>
+        <button class="btn" data-id="${g.id}" data-act="del">Delete</button>
+      </div>`;
+    grid.appendChild(el);
+  });
+  qsa('[data-act="inc"]').forEach(b=> b.addEventListener('click', e=>{
+    const id=e.currentTarget.dataset.id; const g=state.goals.find(x=>x.id===id); g.progress++; save(state); renderRoute('goals');
+  }));
+  qsa('[data-act="del"]').forEach(b=> b.addEventListener('click', e=>{
+    const id=e.currentTarget.dataset.id; if(confirm('Delete goal?')){ state.goals=state.goals.filter(x=>x.id!==id); save(state); renderRoute('goals'); }
+  }));
+  qsa('[data-act="edit"]').forEach(b=> b.addEventListener('click', e=>{
+    const id=e.currentTarget.dataset.id; const g=state.goals.find(x=>x.id===id);
+    const t = prompt('Edit title', g.title); if(t){ g.title=t; save(state); renderRoute('goals'); }
+  }));
+
+  qs('#createGoal').addEventListener('click', ()=>{
+    const t = prompt('Goal title (eg. Learn 100 tactics)'); const targ = Number(prompt('Target days','30')) || 30;
+    if(t){ state.goals.push({id:uid('g'), title:t, progress:0, target:targ}); save(state); renderRoute('goals'); }
+  });
+}
+
+/* ---------- Analytics ---------- */
+function renderAnalytics(root){
+  // compute some stats
+  const totalDays = 30;
+  let consistency = 0;
+  state.habits.forEach(h=> {
+    let cnt=0;
+    for(let i=0;i<totalDays;i++){ const d = dOffset(i); const v=(h.history||{})[d]||0; if(h.type==='binary'){ if(v===1) cnt++ } else { if(v>=h.goal) cnt++ } }
+    consistency += (cnt/totalDays);
+  });
+  consistency = Math.round((consistency/state.habits.length)*100);
+
+  root.innerHTML = `
+    <div style="display:grid;gap:12px">
+      <div class="card">
+        <h3 class="section-title">Analytics</h3>
+        <div style="display:flex;gap:12px">
+          <div class="stat"><h3>${consistency}%</h3><p class="small">30-day consistency</p></div>
+          <div class="stat"><h3>${state.xp}</h3><p class="small">Total XP</p></div>
+          <div class="stat"><h3>${Math.round(state.habits.reduce((s,h)=>s+calcStreak(h.history||{}),0)/Math.max(1,state.habits.length))}d</h3><p class="small">Avg Streak</p></div>
+        </div>
+        <div style="margin-top:12px">
+          <h4 style="margin:0 0 8px">Habit Breakdown</h4>
+          <div id="chartArea" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4 class="section-title">Grind History (last 14 days)</h4>
+        <div id="historyGrid" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+      </div>
+    </div>
+  `;
+  // charts
+  const chartArea = qs('#chartArea');
+  state.habits.forEach(h=>{
+    const el = document.createElement('div'); el.style.flex='1 1 220px'; el.className='card';
+    // compute percent done last 14 days
+    let cnt=0; for(let i=0;i<14;i++){ const d=dOffset(i); const v=(h.history||{})[d]||0; if(h.type==='binary'){ if(v===1) cnt++; } else { if(v>=h.goal) cnt++; } }
+    const pct = Math.round((cnt/14)*100);
+    el.innerHTML = `<h4 style="margin:0">${h.name}</h4><div class="meta">${cnt}/14 days</div><div style="margin-top:8px" class="bar"><i style="width:${pct}%"></i></div>`;
+    chartArea.appendChild(el);
+  });
+
+  // history grid
+  const hg = qs('#historyGrid'); hg.innerHTML='';
+  for(let i=13;i>=0;i--){
+    const d = dOffset(i);
+    const box = document.createElement('div'); box.className='card'; box.style.minWidth='80px'; box.style.textAlign='center';
+    const done = state.habits.reduce((s,h)=> ( ((h.history||{})[d] && ((h.type==='binary' && (h.history[d]===1)) || (h.history[d]>=h.goal))) ? s+1 : s ), 0);
+    box.innerHTML = `<div style="font-weight:700">${new Date(d).toLocaleDateString().split('/').slice(0,2).join('/')}</div><div class="muted">${done}/${state.habits.length}</div>`;
+    hg.appendChild(box);
+  }
+}
+
+/* ---------- Mindset ---------- */
+const quotes = [
+  "Discipline eats desire for breakfast.",
+  "Small reps. Large returns.",
+  "Be silent. Build louder results.",
+  "Your routine is your architecture.",
+  "One day you will thank the routine you kept."
+];
+function renderMindset(root){
+  const q = quotes[Math.floor(Math.random()*quotes.length)];
+  root.innerHTML = `
+    <div class="card">
+      <h3 class="section-title">Mindset — Battle Quotes</h3>
+      <div style="font-family:Orbitron;font-size:20px;margin-top:8px">${q}</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn" id="nextQuote">Next Quote</button>
+        <button class="btn" id="ambientToggle">${state.settings.ambient? 'Ambient: On' : 'Ambient: Off'}</button>
+        <button class="btn primary" id="resetNow">Reset Daily</button>
+      </div>
+      <div style="margin-top:12px" class="muted">Use the focus timer to lock distractions. Reset when you truly need it.</div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h3 class="section-title">Focus Timer</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="focusMin" value="25" type="number" style="width:80px" /> <div class="muted">minutes</div>
+        <button class="btn primary" id="startFocus">Start</button>
+      </div>
+      <div id="focusBar" style="margin-top:12px" class="bar"><i style="width:0%"></i></div>
+    </div>
+  `;
+  qs('#nextQuote').addEventListener('click', ()=> renderRoute('mindset'));
+  qs('#ambientToggle').addEventListener('click', ()=> {
+    state.settings.ambient = !state.settings.ambient; save(state); renderRoute('mindset');
+    if(state.settings.ambient) { startAmbient(); } else { stopAmbient(); }
+  });
+  qs('#resetNow').addEventListener('click', ()=> {
+    if(confirm('Reset all todays values?')){ state.habits.forEach(h=>{ if(h.history) h.history[todayKey()]=0 }); save(state); renderRoute('dashboard'); }
+  });
+  qs('#startFocus').addEventListener('click', ()=> {
+    const mins = Number(qs('#focusMin').value) || 25; startFocusTimer(mins);
+  });
+}
+
+/* ---------- Settings ---------- */
+function renderSettings(root){
+  root.innerHTML = `
+    <div class="card">
+      <h3 class="section-title">Settings</h3>
+      <div style="display:flex;gap:8px;flex-direction:column">
+        <label class="muted">Theme</label>
+        <div style="display:flex;gap:8px">
+          <button class="chip ${state.settings.theme==='dark'?'active':''}" data-theme="dark">Dark</button>
+          <button class="chip ${state.settings.theme==='light'?'active':''}" data-theme="light">Light</button>
+        </div>
+        <label class="muted" style="margin-top:8px">Signature Quote</label>
+        <input id="sigQ" placeholder="Your line to show on share cards" value="Built by FlowKode — ruthless consistency" />
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn primary" id="saveSettings">Save</button>
+          <button class="btn" id="clearData">Factory Reset</button>
+        </div>
+      </div>
+    </div>
+  `;
+  qsa('[data-theme]').forEach(b=> b.addEventListener('click', (e)=> {
+    const t = e.currentTarget.dataset.theme; state.settings.theme = t; save(state); renderRoute('settings');
+  }));
+  qs('#saveSettings').addEventListener('click', ()=> {
+    const sq = qs('#sigQ').value.trim();
+    state.settings.signature = sq; save(state); alert('Settings saved');
+  });
+  qs('#clearData').addEventListener('click', ()=> {
+    if(confirm('Reset all app data? This cannot be undone')){ localStorage.removeItem(LS_KEY); state = load(); renderRoute('home'); alert('Reset'); }
+  });
+}
+
+/* ---------- Habit actions ---------- */
+function toggleHabit(id){
+  const h = state.habits.find(x=>x.id===id);
+  if(!h) return;
+  const d = todayKey();
+  const current = (h.history||{})[d] || 0;
+  if(h.type === 'binary'){ h.history[d] = current===1?0:1; const xp = computeXpFor(h, h.history[d]); state.xp += xp; save(state); renderRoute('dashboard'); triggerConfetti(); }
+  else {
+    // open input modal
+    openModal(`<h3 class="section-title">${h.name} — Save Value</h3>
+      <input id="valInput" placeholder="value (eg. 30)" />
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn primary" id="saveVal">Save</button>
+        <button class="btn" id="cancelVal">Cancel</button>
+      </div>`);
+    qs('#saveVal').addEventListener('click', ()=> {
+      const v = Number(qs('#valInput').value) || 0; saveHabitValue(id, v); closeModal();
+    });
+    qs('#cancelVal').addEventListener('click', ()=> closeModal());
+  }
+}
+function saveHabitValue(id, value){
+  const h = state.habits.find(x=>x.id===id);
+  h.history = h.history || {};
+  h.history[todayKey()] = value;
+  const xp = computeXpFor(h, value); state.xp += xp;
+  save(state); renderRoute('dashboard'); triggerConfetti();
+}
+function openAddHabitModal(){
+  openModal(`<h3 class="section-title">Add Habit</h3>
+    <input id="modalName" placeholder="Habit name" />
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <select id="modalType"><option value="binary">Binary</option><option value="time">Time</option><option value="count">Count</option></select>
+      <input id="modalGoal" placeholder="Goal" value="1" />
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn primary" id="addNow">Add</button>
+      <button class="btn" id="cancelAdd">Cancel</button>
+    </div>`);
+  qs('#addNow').addEventListener('click', ()=> {
+    const name = qs('#modalName').value.trim(); const type=qs('#modalType').value; const goal=Number(qs('#modalGoal').value)||1;
+    if(!name) return alert('Name required');
+    state.habits.unshift({id:uid('h'), name, type, goal, history:{}}); save(state); closeModal(); renderRoute('dashboard');
+  });
+  qs('#cancelAdd').addEventListener('click', ()=> closeModal());
+}
+
+/* ---------- Focus timer ---------- */
+let focusTimerInterval = null;
+function startFocusTimer(mins){
+  const total = mins * 60; let left = total;
+  const bar = qs('#focusBar i');
+  if(focusTimerInterval) clearInterval(focusTimerInterval);
+  focusTimerInterval = setInterval(()=>{
+    left--; const pct = Math.round(((total-left)/total)*100);
+    bar.style.width = pct + '%';
+    if(left<=0){ clearInterval(focusTimerInterval); bar.style.width='0%'; alert('Focus session complete — CONSISTENCY > 0'); triggerConfetti(); }
+  },1000);
+}
+
+/* ---------- Ambient sound ---------- */
+let ambientAudio = null;
+function startAmbient(){
+  if(!ambientAudio){
+    ambientAudio = new Audio();
+    ambientAudio.src = 'data:audio/mpeg;base64,//uQxAAAAAAAAAAAAAAAAAAAAAA...'; // intentionally blank fallback (browsers require actual audio for real ambient)
+    ambientAudio.loop=true; ambientAudio.volume=0.12;
+  }
+  try{ ambientAudio.play(); }catch(e){}
+}
+function stopAmbient(){ try{ ambientAudio.pause(); ambientAudio.currentTime=0; }catch(e){} }
+
+/* ---------- Utils ---------- */
+function dOffset(i){
+  const d = new Date(); d.setDate(d.getDate() - i); return d.toISOString().slice(0,10);
+}
+
+/* ---------- Init / boot ---------- */
+function boot(){
+  // initial theme (we keep dark-based)
+  if(state.settings.theme === 'light'){
+    document.body.style.background = '#f7fafc';
+    document.body.style.color = '#0b1220';
+  }
+  renderRoute('home');
+  // quick gesture: when user clicks anywhere on logo show modal about FlowKode
+  qs('.logo').addEventListener('click', ()=> openModal(`<h3 class="section-title">FlowKode — TheGrind</h3><p class="muted">Built by a maker who prefers action. Share your grind card on socials.</p><div style="margin-top:12px"><button class="btn primary" id="modalClose">Close</button></div>`));
+  qs('#modal').addEventListener('click', (e)=> { if(e.target.id==='modal') closeModal(); });
+  document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+}
+
+boot();
+
+/* ---------- Expose a little for console tinkering (for you) ---------- */
+window.TheGrindLog = {
+  state,
+  saveState: ()=>{ save(state); alert('saved'); },
+  getState: ()=>state,
+  resetSample: ()=>{ state = load(); save(state); renderRoute('home'); }
+};
+
+</script>
+</body>
+</html>
